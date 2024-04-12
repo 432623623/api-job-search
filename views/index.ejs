@@ -1,0 +1,54 @@
+<!DOCTYPE HTML>
+
+<html>
+  <head>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+  <link rel='stylesheet' href='/styles/main.css' type='text/css'>
+    <title>job search</title>
+  </head>
+  
+  <body>
+  <div class='container'>
+    <h1 class='mt-5'>job search</h1>
+    <form action='/' id='myForm' method='post' class='mt-4'>
+      <div class='mb-3'>
+      <input type='text' id='searchInput' name='search' class='form-control'>
+      </div>
+      <button id='post' type='submit' class="btn btn-primary">search</button>      
+    </form>
+    <div class='mt-5'>
+      <% if (searchTerm!=='') {%>
+      You searched for: "<%= searchTerm %>"
+      <% } %>
+    </div>
+    <div class='mt-5'>
+    <% if (result) { %>
+    <ul class='list-group'>	
+      <% for (let i=0;i<result.length;i++) { %>
+      <li class='list-group-item'>        
+        <div class='job-title'><%= result[i].title %><br><br></div>
+        <div class='job-details'>
+        <%= result[i].company.display_name %><br><br>
+        <%= result[i].location.display_name %><br><br>
+        <% if (result[i].contract_time) { %>
+        <%= result[i].contract_time.substr(0,4) + ' ' + result[i].contract_time.substr(5)  %><br><br>
+        <% } %>
+        <%= result[i].description %><br><br>
+        date created: <%= result[i].created.substr(0,10) %><br><br>
+        salary: $<%= result[i].salary_max.toLocaleString() %><br><br>
+        link: <a href="<%= result[i].redirect_url%>"><%= result[i].redirect_url%></a><br>
+        </div>
+      </li>
+      <% } %>
+    </ul>
+      <% if (result.length===20) {%>
+        <a href='/next-20' class="btn btn-primary mt-3">next 20 results</a>
+      <% } %>
+    <% } else {%>
+    <h2>no results</h2>
+    <% } %>
+    </div>
+  </div>  
+  </body>
+  
+</html>
