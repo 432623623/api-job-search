@@ -10,7 +10,7 @@
   <body>
   <div class='container'>
     <h1 class='mt-5'>job search</h1>
-    <form action='/' id='myForm' method='post' class='mt-4'>
+    <form action='/results/page/1' id='myForm' method='post' class='mt-4'>
       <div class='mb-3'>
       <input type='text' id='searchInput' name='search' class='form-control'>
       </div>
@@ -19,6 +19,14 @@
     <div class='mt-5'>
       <% if (searchTerm!=='') {%>
       You searched for: "<%= searchTerm %>"
+      <% } %>
+      <% if (total>0) {%>
+        , total results: <%= total %>
+        <% if (total - (page * 20)>0) { %>
+          , showing results: <%= (page-1)*20+1 %> to <%= page * 20 %>
+        <% } else { %>
+          , showing results: <%= (page-1)*20+1 %> to <%= (page-1) * 20 + total%20 %>
+        <% } %>
       <% } %>
     </div>
     <div class='mt-5'>
@@ -35,14 +43,19 @@
         <% } %>
         <%= result[i].description %><br><br>
         date created: <%= result[i].created.substr(0,10) %><br><br>
-        salary: $<%= result[i].salary_max.toLocaleString() %><br><br>
+        salary: $<%= result[i].salary_max ? result[i].salary_max.toLocaleString() : 'N/A' %><br><br>
         link: <a href="<%= result[i].redirect_url%>"><%= result[i].redirect_url%></a><br>
         </div>
       </li>
       <% } %>
     </ul>
-      <% if (result.length===20) {%>
-        <a href='/next-20' class="btn btn-primary mt-3">next 20 results</a>
+    <% if (page>1) { %>
+        <a href="/results/page/<%= page - 1 %>" class="btn btn-primary mt-3">back</a>
+    <% } %>
+      <% if  (total - (page * 20) >=20) {%>
+        <a href="/results/page/<%= page + 1 %>" class="btn btn-primary mt-3">next page</a>
+      <% } else if  (total - (page * 20) > 0){ %>
+        <a href="/results/page/<%= page + 1 %>" class="btn btn-primary mt-3">last page</a>
       <% } %>
     <% } else {%>
     <h2>no results</h2>
