@@ -1,2 +1,2 @@
-job search app using express, ejs, axios.
-gets job listings from Adzuna API
+This is a job search app using express, ejs, axios, node.js, HTML, CSS.
+It gets job listings from Adzuna API.
